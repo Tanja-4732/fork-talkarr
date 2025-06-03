@@ -1,73 +1,80 @@
-import type { Metadata, NextPage } from 'next';
+import type { Metadata, NextPage } from "next";
 
-import { getConfig } from '@/app/_api/settings/mediamanagement';
-import AddFolderButton from '@/app/(globalModals)/settings/mediamanagement/_components/AddFolderButton';
-import FolderRow from '@/app/(globalModals)/settings/mediamanagement/_components/FolderRow';
+import { getConfig } from "@/app/_api/settings/authmanagement";
+import FolderRow from "@/app/(globalModals)/settings/authmanagement/_components/FolderRow";
 
-import Box from '@mui/material/Box';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import Typography from '@mui/material/Typography';
+import Box from "@mui/material/Box";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import Typography from "@mui/material/Typography";
 
 export const metadata: Metadata = {
-    title: 'Mediamanagement Settings',
+    title: "Authmanagement Settings",
 };
 
 const Page: NextPage = async () => {
-    const config = await getConfig();
+    // const config = await getConfig();
 
-    const data = config?.success ? config.data : null;
+    // const data = config?.success ? config.data : null;
 
     return (
         <Box data-testid="auth-management-settings">
             <Box>
                 <Typography variant="h3">Auth settings</Typography>
                 <Typography variant="body1">
-                    Root folders are the base directories where media files are
-                    stored.
+                    Configure the OpenID Connect (OIDC) settings for your
+                    application. You need to provide a client ID and the URL of
+                    your Identity Provider (IDP), from which the IDP settings
+                    will be fetched automatically using the OpenID Connect
+                    Discovery mechanism. A client secret is not required, as
+                    we&apos;re using PKCE (Proof Key for Code Exchange) for
+                    authentication.
                 </Typography>
-                <Table
-                    sx={{
-                        // Thanks to Google Chrome for being such a nice browser
-                        tableLayout: 'fixed',
-                        maxWidth: '100%',
 
-                        // set word-wrap for all inner td elements
-                        '& td': {
-                            wordWrap: 'break-word',
-                        },
-                    }}
+                {/* A key-value section for IDP url and App ID */}
+                <div
+                    style={{ display: 'grid', gridTemplateColumns: '1fr 1fr' }}
                 >
-                    <TableHead>
-                        <TableRow>
-                            <TableCell>Folder</TableCell>
-                            <TableCell>Free Space</TableCell>
-                            <TableCell align="right">Actions</TableCell>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {data?.folders.map(({ folder, free_space }) => (
-                            <FolderRow
-                                folder={folder}
-                                freeSpace={free_space}
-                                key={folder}
-                            />
-                        ))}
-                        {data?.folders.length === 0 ? (
-                            <TableRow data-testid="no-root-folder">
-                                <TableCell colSpan={3}>
-                                    No root folders have been configured.
-                                </TableCell>
-                            </TableRow>
-                        ) : null}
-                    </TableBody>
-                </Table>
-                <Box mt={2}>
-                    <AddFolderButton />
-                </Box>
+                    <Box>
+                        <Typography variant="h4">IDP URL</Typography>
+                        <Typography variant="body1">
+                            The URL of your Identity Provider (IDP).
+                        </Typography>
+                    </Box>
+                    <Box>
+                        <input
+                            type="text"
+                            placeholder="https://example.com  [/.well-known/openid-configuration]"
+                            style={{
+                                width: '100%',
+                                padding: '8px',
+                                borderRadius: '4px',
+                                border: '1px solid #ccc',
+                            }}
+                        />
+                    </Box>
+                    <Box>
+                        <Typography variant="h4">App ID</Typography>
+                        <Typography variant="body1">
+                            The client ID of your application.
+                        </Typography>
+                    </Box>
+                    <Box>
+                        <input
+                            type="text"
+                            placeholder="2342342342342353646435"
+                            style={{
+                                width: '100%',
+                                padding: '8px',
+                                borderRadius: '4px',
+                                border: '1px solid #ccc',
+                            }}
+                        />
+                    </Box>
+                </div>
             </Box>
         </Box>
     );
