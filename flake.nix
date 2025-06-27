@@ -2,7 +2,7 @@
   description = "Run 'nix develop' to have a dev shell that has everything this project needs";
 
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs";
+    nixpkgs.url = "github:NixOS/nixpkgs/release-25.05";
     flake-utils.url = "github:numtide/flake-utils";
   };
 
