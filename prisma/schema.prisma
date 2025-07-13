@@ -153,13 +153,25 @@ model User {
   id  String  @id @default(cuid())
   sub String? @unique
 
-  email    String @unique
-  password String // argon2
+  email    String  @unique
+  password String? // argon2id
 
   displayName String
   permissions UserPermission[]
   isActive    Boolean          @default(true)
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  Session   Session[]
+}
+
+// A user can have multiple sessions (e.g. for different devices or browsers)
+model Session {
+  id           String   @id @default(cuid())
+  userId       String
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  duration     Int? // duration in seconds, null means no expiration
+  createdAt    DateTime @default(now())
+  sessionToken String   @unique
+  descriptor   String? // optional description for the session (e.g. "Home PC", "Work Laptop")
 }
